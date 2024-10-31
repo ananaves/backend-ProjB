@@ -1,7 +1,11 @@
+import { DatabaseModel } from "./DatabaseModel";
+
+const database = new DatabaseModel().pool;
+
 /**
  * Classe que representa um livro
  */
-export class Livros {
+export class Livro {
 
     /* Atributos */
     /* Id do livro */
@@ -220,4 +224,111 @@ export class Livros {
     public setStatusLivroEmprestado(statusLivroEmprestado: string): void {
         this.statusLivroEmprestado = statusLivroEmprestado;
     }
+    /**
+         * O método listarLivro executa uma consulta SQL para buscar todos os livros da tabela livro no banco de dados.
+         * @returns todos os carros encontrados no banco de dados.
+         */
+    static async listarLivro(): Promise<Array<Livro> | null> {
+
+        let listaDeLivro: Array<Livro> = [];
+
+        try {
+
+            //query de consulta no banco de dados
+            const querySelectLivro = `SELECT * FROM livro;`;
+
+
+            const respostaBD = await database.query(querySelectLivro);
+
+ 
+            respostaBD.rows.forEach((livro: any) => {
+                let novoLivro = new Livro(
+                    livro.titulo,
+                    livro.autor,
+                    livro.editora,
+                    livro.anoPublicacao,
+                    livro.isbn,
+                    livro.quantTotal,
+                    livro.quantDisponivel,
+                    livro.valorAquisicao,
+                    livro.statusLivroEmprestado,
+
+                );
+
+                //atribuir objeito
+                novoLivro.setIdLivro(livro.id_livro);
+
+                //adicionar o objeto na lista
+                listaDeLivro.push(novoLivro);
+
+            });
+
+            return listaDeLivro;
+
+
+        } catch (error) {
+            console.log(`Erro ao acessar o modelo: ${error}`);
+            return null;
+        }
+    }
+
+    /**
+     * Realiza o cadastro de um livro no banco de dados.
+     * 
+     * Esta função recebe um objeto do tipo `Livro` e insere seus dados (titulo, autor, aditora, 
+     * anoPublicacao, isbn, quantTotal, quantDisponivel, valorAquisicao, statusLivroEmprestado)
+     * na tabela `livro` do banco de dados. O método retorna um valor booleano indicando se o cadastro 
+     * foi realizado com sucesso.
+     * 
+     * @param {Livro} livro - Objeto contendo os dados do livro que será cadastrado. O objeto `Livro`
+     *                        deve conter os métodos `getTitulo()`, `getAutor()`, `getEditora()`, `getAnoPublicacao()`,
+     *                        `getIsbn()`, `getQuantTotal()`, `getQuantDisponivel()`, `getValorAquisicao()`, `getStatusLivroEmprestado()`
+     *                        que retornam os respectivos valores do livro.
+     * @returns {Promise<boolean>} - Retorna `true` se o livro foi cadastrado com sucesso e `false` caso contrário.
+     *                               Em caso de erro durante o processo, a função trata o erro e retorna `false`.
+     * 
+     * @throws {Error} - Se ocorrer algum erro durante a execução do cadastro, uma mensagem de erro é exibida
+     *                   no console junto com os detalhes do erro.
+     */
+    static async cadastroLivro(livro: Livro): Promise<boolean> {
+        try {
+            // query para fazer insert de um livro no banco de dados
+            const queryInsertLivro = `INSERT INTO livro (titulo, autor, aditora, 
+                                     anoPublicacao, isbn, quantTotal, quantDisponivel, valorAquisicao, statusLivroEmprestado)
+                                    VALUES
+                                    ('${livro.getTitulo()}', 
+                                    '${livro.getAutor()}'
+                                    '${livro.getEditora()}'
+                                    '${livro.getAnoPublicacao()}'
+                                    '${livro.getIsbn()}'
+                                    '${livro.getQuantTotal()}'
+                                    '${livro.getQuantDisponivel()}'
+                                    '${livro.getValorAquisicao()}'
+                                    '${livro.getStatusLivroEmprestado()}'
+                                   )
+                                    RETURNING id_livro;`;
+
+            // executa a query no banco e armazena a resposta
+            const respostaBD = await database.query(queryInsertLivro);
+
+            // verifica se a quantidade de linhas modificadas é diferente de 0
+            if (respostaBD.rowCount != 0) {
+                console.log(`Livro cadastrado com sucesso! ID do Livro: ${respostaBD.rows[0].id_livro}`);
+                // true significa que o cadastro foi feito
+                return true;
+            }
+            // false significa que o cadastro NÃO foi feito.
+            return false;
+
+            // tratando o erro
+        } catch (error) {
+            // imprime outra mensagem junto com o erro
+            console.log('Erro ao cadastrar o livro. Verifique os logs para mais detalhes.');
+            // imprime o erro no console
+            console.log(error);
+            // retorno um valor falso
+            return false;
+        }
+    }
 }
+

@@ -1,12 +1,37 @@
 import { Request, Response, Router } from "express";
+import { AlunoController } from "./controller/AlunoController";
+import { LivroController } from "./controller/LivroController";
+import { EmprestimoController } from "./controller/EmprestimoController";
 
-//criando um roteador
+
+// Cria um roteador
 const router = Router();
 
-//criando uma rota principal para a aplicação
-router.get("/", (req: Request, res:Response) => {
-    res.json({ mensagem: "Teste de servidor para o sistema BibliOn"});
+// Criando uma rota principal para a aplicação
+router.get("/", (req: Request, res: Response) => {
+    res.json({ mensagem: "Olá, mundo!" });
 });
 
-//exportando as rotas
-export {router};
+/* 
+* ROTAS PARA LIVROS
+*/ 
+// Rota para listar os livros
+router.get("/lista/livro", LivroController.todos);
+router.post("/novo/livro", LivroController.novo);
+
+/* 
+* ROTAS PARA ALUNOS
+*/ 
+// Rota para listar os alunos
+router.get("/lista/aluno", AlunoController.todos);
+router.post("/novo/aluno", AlunoController.novo);
+
+/* 
+* ROTAS PARA EMPRESTIMOS
+*/ 
+// Rota para listar os emprestimos
+router.get("/lista/emprestimo", EmprestimoController.todos);
+router.post("/novo/emprestimo", EmprestimoController.novo);
+
+// exportando as rotas
+export { router };
