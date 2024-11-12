@@ -4,7 +4,7 @@ import { Aluno } from "../model/Aluno";
 interface AlunoDTO {
     nome: string,
     sobrenome:string,
-    data_nascimento: Date,
+    dataNascimento: Date,
     endereco: string,
     email: string,
     celular: string
@@ -63,15 +63,16 @@ export class AlunoController extends Aluno {
             const alunoRecebido: AlunoDTO = req.body;
 
             // instanciando um objeto do tipo aluno com as informações recebidas
-            const novoAluno = new Aluno( alunoRecebido.celular,
+            const novoAluno = new Aluno(
                 alunoRecebido.nome,
                 alunoRecebido.sobrenome,
-                alunoRecebido.data_nascimento,
+                alunoRecebido.dataNascimento,
                 alunoRecebido.endereco,
                 alunoRecebido.email,
-                alunoRecebido.celular,
+                alunoRecebido.celular
                 );
 
+            
             // Chama a função de cadastro passando o objeto como parâmetro
             const repostaClasse = await Aluno.cadastroAluno(novoAluno);
 

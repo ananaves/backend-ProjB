@@ -246,12 +246,12 @@ export class Livro {
                     livro.titulo,
                     livro.autor,
                     livro.editora,
-                    livro.anoPublicacao,
+                    livro.ano_publicacao,
                     livro.isbn,
-                    livro.quantTotal,
-                    livro.quantDisponivel,
-                    livro.valorAquisicao,
-                    livro.statusLivroEmprestado,
+                    livro.quant_total,
+                    livro.quant_disponivel,
+                    livro.valor_aquisicao,
+                    livro.status_livro_emprestado
 
                 );
 
@@ -293,17 +293,17 @@ export class Livro {
     static async cadastroLivro(livro: Livro): Promise<boolean> {
         try {
             // query para fazer insert de um livro no banco de dados
-            const queryInsertLivro = `INSERT INTO livro (titulo, autor, aditora, 
-                                     anoPublicacao, isbn, quantTotal, quantDisponivel, valorAquisicao, statusLivroEmprestado)
+            const queryInsertLivro = `INSERT INTO livro (titulo, autor, editora, 
+                                     ano_publicacao, isbn, quant_total, quant_disponivel, valor_aquisicao, status_livro_emprestimo)
                                     VALUES
                                     ('${livro.getTitulo()}', 
-                                    '${livro.getAutor()}'
-                                    '${livro.getEditora()}'
-                                    '${livro.getAnoPublicacao()}'
-                                    '${livro.getIsbn()}'
-                                    '${livro.getQuantTotal()}'
-                                    '${livro.getQuantDisponivel()}'
-                                    '${livro.getValorAquisicao()}'
+                                    '${livro.getAutor()}',
+                                    '${livro.getEditora()}',
+                                    '${livro.getAnoPublicacao()}',
+                                    '${livro.getIsbn()}',
+                                    '${livro.getQuantTotal()}',
+                                    '${livro.getQuantDisponivel()}',
+                                    '${livro.getValorAquisicao()}',
                                     '${livro.getStatusLivroEmprestado()}'
                                    )
                                     RETURNING id_livro;`;

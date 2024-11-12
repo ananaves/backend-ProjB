@@ -65,7 +65,8 @@ export class LivroController extends Livro {
             const livroRecebido: LivroDTO = req.body;
 
             // instanciando um objeto do tipo livro com as informações recebidas
-            const novoLivro = new Livro(livroRecebido.titulo,
+            const novoLivro = new Livro(
+                livroRecebido.titulo,
                 livroRecebido.autor,
                 livroRecebido.editora,
                 livroRecebido.anoPublicacao,
@@ -78,6 +79,8 @@ export class LivroController extends Livro {
 
             // Chama a função de cadastro passando o objeto como parâmetro
             const repostaClasse = await Livro.cadastroLivro(novoLivro);
+
+            console.log(novoLivro);
 
             // verifica a resposta da função
             if (repostaClasse) {

@@ -12,7 +12,7 @@ export class Aluno {
     /* Id do aluno */
     private idAluno: number = 0;
     /* ra do aluno */
-    private ra: string;
+    private ra: string = "";
     /* Nome do aluno */
     private nome: string;
     /* Sobrenome do aluno */
@@ -29,7 +29,6 @@ export class Aluno {
     /**
      * Construtor da classe Aluno
      * 
-     * @param ra Ra do aluno
      * @param nome Nome do aluno
      * @param sobrenome Sobrenome do aluno
      * @param dataNascimento Data de nascimento do aluno
@@ -39,7 +38,6 @@ export class Aluno {
      */
 
     constructor(
-        ra: string,
         nome: string,
         sobrenome: string,
         dataNascimento: Date,
@@ -48,7 +46,6 @@ export class Aluno {
         celular: string
 
     ){
-        this.ra = ra;
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.dataNascimento = dataNascimento;
@@ -202,16 +199,16 @@ static async listarAluno(): Promise<Array<Aluno> | null> {
 
         respostaBD.rows.forEach((aluno: any) => {
             let novoAluno = new Aluno(
-                aluno.ra,
                 aluno.nome,
                 aluno.sobrenome,
                 aluno.data_nascimento,
                 aluno.endereco,
                 aluno.email,
-                aluno.celular,
+                aluno.celular
             );
 
-            novoAluno.setIdAluno(aluno.id);
+            novoAluno.setIdAluno(aluno.id_aluno);
+            novoAluno.setRa(aluno.ra);
 
             listaDeAluno.push(novoAluno);
 
@@ -245,14 +242,15 @@ static async listarAluno(): Promise<Array<Aluno> | null> {
 static async cadastroAluno(aluno: Aluno): Promise<boolean> {
     try {
         // query para fazer insert de um aluno no banco de dados
-        const queryInsertAluno = `INSERT INTO aluno (nome, sobrenome, data_nascimento, enderoco, email, celular)
+        const queryInsertAluno = `INSERT INTO aluno (nome, sobrenome, data_nascimento, endereco, email, celular)
                                     VALUES
                                     ('${aluno.getNome()}', 
                                     '${aluno.getSobrenome()}', 
                                     '${aluno.getDataNascimento()}',
                                     '${aluno.getEndereco()}', 
                                     '${aluno.getEmail()}', 
-                                    '${aluno.getCelular()}', )
+                                    '${aluno.getCelular()}'
+                                    )
                                     RETURNING id_aluno;`;
 
         // executa a query no banco e armazena a resposta
