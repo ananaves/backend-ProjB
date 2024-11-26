@@ -78,7 +78,7 @@ export class Livro {
      * @param idLivro novo id do livro a ser identificado
      */
     public setIdLivro(idLivro: number): void {
-        this.idLivro;
+        this.idLivro = idLivro;
     }
 
     /**

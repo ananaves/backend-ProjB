@@ -68,7 +68,7 @@ export class Aluno {
      * @param idAluno novo aluno a ser identificado
      */
     public setIdAluno (idAluno: number): void{
-        this.idAluno;
+        this.idAluno = idAluno;
     }
 
     /**
@@ -197,10 +197,10 @@ static async listarAluno(): Promise<Array<Aluno> | null> {
 
         const respostaBD = await database.query(querySelectAluno);
 
-        respostaBD.rows.forEach((aluno: any) => {
+        respostaBD.rows.forEach((aluno) => {
             let novoAluno = new Aluno(
                 aluno.nome,
-                aluno.sobrenome,
+                aluno.sobrenome,    
                 aluno.data_nascimento,
                 aluno.endereco,
                 aluno.email,
