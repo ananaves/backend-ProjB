@@ -145,8 +145,8 @@ export class Emprestimo {
     }
 
     /**
-         * O método listarEmprestimo executa uma consulta SQL para buscar todos os pedidos e vendas da tabela emprestimo no banco de dados.
-         * @returns todos os pedidos e vendas encontrados no banco de dados.
+         * O método listarEmprestimo executa uma consulta SQL para buscar todos os emprestimos e vendas da tabela emprestimo no banco de dados.
+         * @returns todos os emprestimos e vendas encontrados no banco de dados.
          */
 
     static async listarEmprestimo(): Promise<Array<Emprestimo> | null> {
@@ -190,7 +190,7 @@ export class Emprestimo {
      * status_emprestimo)
      * na tabela `emprestimo` do banco de dados. O método retorna um valor booleano indicando se o cadastro 
      * foi realizado com sucesso.
-     * @param {Emprestimo} emprestimo - Objeto contendo os dados do pedidoVenda que será cadastrado. O objeto `Emprestimo`
+     * @param {Emprestimo} emprestimo - Objeto contendo os dados do emprestimoVenda que será cadastrado. O objeto `Emprestimo`
     deve conter os métodos `getIdLivro()`, `getIdAluno()`, `getDataEmprestimo(), `getDataDevolucao()`, `getStatusEmprestimo()`
     que retornam os respectivos valores do emprestimo.
      * @returns {Promise<boolean>} - Retorna `true` se o Emprestimo foi cadastrado com sucesso e `false` caso contrário.
@@ -207,7 +207,7 @@ export class Emprestimo {
                                     '${emprestimo.getIdAluno()}',
                                     '${emprestimo.getDataEmprestimo()}',
                                     '${emprestimo.getDataDevolucao()}',
-                                    '${emprestimo.getStatusEmprestimo()}',
+                                    '${emprestimo.getStatusEmprestimo()}'
                                     )
                                     RETURNING id_emprestimo;`;
 
@@ -234,65 +234,46 @@ export class Emprestimo {
         }
     }
 
-
-    //MISAO ZÉ
-    //pegar o nome do aluno e o titulo do livro pela listagem de empréstimo
-
-    
     /**
-         * Lista os empréstimos junto com o nome do aluno e o título do livro.
-         * 
-         * Este método faz um `JOIN` nas tabelas `emprestimo`, `aluno`, e `livro`
-         * para retornar uma lista detalhada de empréstimos, incluindo o nome do aluno
-         * e o título do livro.
-         * 
-         * @returns {Promise<Array<any> | null>} Lista de empréstimos com detalhes ou null em caso de erro.
-         */
+     * Atualiza os dados de um emprestimo no banco de dados.
+     * 
+     * Esta função atualiza os campos de um emprestimo na tabela `emprestimo` com base no ID fornecido. 
+     * Retorna `true` se a atualização for bem-sucedida (linhas afetadas) ou `false` caso contrário.
+     * 
+     * @param {emprestimo} emprestimo - Objeto contendo os dados do emprestimo a serem atualizados.
+     * @returns {Promise<boolean>} - Retorna `true` se o emprestimo foi atualizado com sucesso, `false` caso contrário.
+     * 
+     * @throws {Error} - Caso ocorra um erro na execução da query, ele será logado no console.
+     */
+    static async atualizarEmprestimo(emprestimo: Emprestimo): Promise < boolean > {
+    try {
+        // Query para atualizar os dados do emprestimo no banco de dados
+        const queryUpdateEmprestimo = `UPDATE Emprestimo SET
+                id_livro ='${emprestimo.getIdLivro()}', 
+                id_aluno = '${emprestimo.getIdAluno()}',
+                data_emprestimo ='${emprestimo.getDataEmprestimo()}',
+                data_devolucao = '${emprestimo.getDataDevolucao()}',
+                status_emprestimo ='${emprestimo.getStatusEmprestimo()}'
+                WHERE id_emprestimo = ${emprestimo.getIdEmprestimo()}`;
 
-    static async listarEmprestimosComDetalhes(): Promise<Array<any> | null> {
-        try {
-            // Query SQL para buscar os empréstimos com nome do aluno e título do livro
-            const query = `
-            SELECT 
-                e.id_emprestimo,
-                e.id_aluno,
-                a.nome AS nome_aluno,
-                e.id_livro,
-                l.titulo AS titulo_livro,
-                e.data_emprestimo,
-                e.data_devolucao,
-                e.status_emprestimo
-            FROM emprestimo e
-            INNER JOIN aluno a ON e.id_aluno = a.id_aluno
-            INNER JOIN livro l ON e.id_livro = l.id_livro;
-        `;
+        // Executa a query no banco de dados
+        const respostaBD = await database.query(queryUpdateEmprestimo);
 
-            // Executar a query no banco de dados
-            const respostaBD = await database.query(query);
+        // Verifica se alguma linha foi afetada pela query
+        if(respostaBD.rowCount != 0) {
+    // Loga uma mensagem de sucesso no console
+    console.log(`Emprestimo atualizado com sucesso! ID: ${emprestimo.getIdEmprestimo()}`);
+    return true; // Retorna `true` para indicar sucesso
+}
 
-            // Criar uma lista para armazenar os resultados formatados
-            const listaEmprestimosDetalhada: Array<any> = [];
-
-            // Processar os resultados
-            respostaBD.rows.forEach((row: any) => {
-                listaEmprestimosDetalhada.push({
-                    idEmprestimo: row.id_emprestimo,
-                    idAluno: row.id_aluno,
-                    nomeAluno: row.nome_aluno,
-                    idLivro: row.id_livro,
-                    tituloLivro: row.titulo_livro,
-                    dataEmprestimo: row.data_emprestimo,
-                    dataDevolucao: row.data_devolucao,
-                    statusEmprestimo: row.status_emprestimo
-                });
-            });
-
-            // Retornar a lista detalhada
-            return listaEmprestimosDetalhada;
+// Retorna `false` se nenhuma linha foi afetada (emprestimo não encontrado)
+return false;
         } catch (error) {
-            console.log(`Erro ao listar empréstimos com detalhes: ${error}`);
-            return null;
-        }
+    // Loga uma mensagem de erro com detalhes no console
+    console.error(`Erro ao atualizar emprestimo. ID: ${emprestimo.getIdEmprestimo()}. Detalhes: ${error}`);
+    return false; // Retorna `false` para indicar falha na operação
+}
     }
+
 
 }

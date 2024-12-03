@@ -1,0 +1,322 @@
+{
+	"info": {
+		"_postman_id": "a6ba8a20-21cd-4403-afe6-006d5b190f94",
+		"name": "Biblioteca",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38148743"
+	},
+	"item": [
+		{
+			"name": "Livro",
+			"item": [
+				{
+					"name": "Listar Livro",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4444/lista/livro",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4444",
+							"path": [
+								"lista",
+								"livro"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar Livro",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\": \"SISTEMAS OPERACIONAIS MODERNOS\",\r\n    \"autor\": \"ANDREW S. TANENBAUM\",\r\n    \"editora\": \"Pearson\",\r\n    \"anoPublicacao\":\"2016\", \r\n    \"isbn\": \"978-85-4301-818-8\",\r\n    \"quantTotal\": 10,\r\n    \"quantDisponivel\": 8,\r\n    \"valorAquisicao\": 250,\r\n    \"statusLivroEmprestado\": \"Emprestado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4444/novo/livro",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4444",
+							"path": [
+								"novo",
+								"livro"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Livro",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"titulo\": \"Hipotese do amor\",\r\n \"autor\": \"Ali Hazelwood\",\r\n \"editora\": \"Arqueiro\",\r\n \"anoPublicacao\": \"2021\",\r\n \"isbn\":9786555656862,\r\n \"quantTotal\":\"10\",\r\n \"quantDisponivel\":\"9\",\r\n \"valorAquisicao\":\"89.90\",\r\n \"statusLivroEmprestado\":\"Emprestado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4444/atualizar/livro/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4444",
+							"path": [
+								"atualizar",
+								"livro",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Livro",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4444/delete/livro/22",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4444",
+							"path": [
+								"delete",
+								"livro",
+								"22"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Aluno",
+			"item": [
+				{
+					"name": "Listar Aluno",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4444/lista/aluno",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4444",
+							"path": [
+								"lista",
+								"aluno"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar Aluno",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"nome\": \"Miguel\",\r\n        \"sobrenome\": \"Sousa\",\r\n        \"dataNascimento\": \"2004-09-18\",\r\n        \"endereco\": \"Rua B, 799\",\r\n        \"email\": \"miguel000@gmail.com\",\r\n        \"celular\": \"16999015502\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4444/novo/aluno",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4444",
+							"path": [
+								"novo",
+								"aluno"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Aluno",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4444/delete/aluno/21",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4444",
+							"path": [
+								"delete",
+								"aluno",
+								"21"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Aluno",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"idAluno\": 8,\r\n        \"ra\": \"AAA0008\",\r\n        \"nome\": \"Ana Julia\",\r\n        \"sobrenome\": \"Gomes\",\r\n        \"dataNascimento\": \"2005-01-11\",\r\n        \"endereco\": \"Rua B, 123\",\r\n        \"email\": \"anajuGoss@gmail.com\",\r\n        \"celular\": \"16998959800\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4444/atualizar/aluno/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4444",
+							"path": [
+								"atualizar",
+								"aluno",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Emprestimo",
+			"item": [
+				{
+					"name": "Listar Emprestimo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4444/lista/emprestimo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4444",
+							"path": [
+								"lista",
+								"emprestimo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cadastrar Emprestimo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"idAluno\": 9,\r\n    \"idLivro\": 6,\r\n    \"dataEmprestimo\": \"2024-08-16\",\r\n    \"dataDevolucao\": \"2024-09-16\",\r\n    \"statusEmprestimo\":\"Emprestado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4444/novo/emprestimo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4444",
+							"path": [
+								"novo",
+								"emprestimo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Emprestimo",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"idAluno\": 3,\r\n    \"idLivro\": 4,\r\n    \"dataEmprestimo\": \"2024-08-10\",\r\n    \"dataDevolucao\": \"2024-09-10\",\r\n    \"statusEmprestimo\":\"Emprestado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4444/atualizar/emprestimo/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4444",
+							"path": [
+								"atualizar",
+								"emprestimo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

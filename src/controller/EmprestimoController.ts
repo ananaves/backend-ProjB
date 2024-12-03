@@ -65,7 +65,7 @@ export class EmprestimoController extends Emprestimo {
                 emprestimoRecebido.idAluno,
                 emprestimoRecebido.dataEmprestimo,
                 emprestimoRecebido.dataDevolucao,
-                emprestimoRecebido.statusEmprestimo,
+                emprestimoRecebido.statusEmprestimo
                 );
 
             // Chama a função de cadastro passando o objeto como parâmetro
@@ -77,7 +77,7 @@ export class EmprestimoController extends Emprestimo {
                 return res.status(200).json({ mensagem: "Emprestimo cadastrado com sucesso!" });
             } else {
                 // retorno uma mensagem de erro
-                return res.status(400).json({ mensagem: "Erro ao cadastra o Emprstimo. Entre em contato com o administrador do sistema." })
+                return res.status(400).json({ mensagem: "Erro ao cadastra o EmprescleRtimo. Entre em contato com o administrador do sistema." })
             }
 
         } catch (error) {
@@ -86,6 +86,64 @@ export class EmprestimoController extends Emprestimo {
 
             // retorna uma mensagem de erro há quem chamou a mensagem
             return res.status(400).json({ mensagem: "Não foi possível cadastrar o Emprestimo. Entre em contato com o administrador do sistema." });
+        }
+    }
+  
+    
+    /**
+     * Atualiza os dados de um emprestimo no sistema.
+     * 
+     * Esta função recupera os dados do emprestimo a serem atualizados a partir do corpo da requisição (`req.body`) 
+     * e o ID do emprestimo a partir dos parâmetros da URL. Verifica se o ID é válido, cria um objeto `emprestimo` 
+     * com os dados fornecidos e chama o método do modelo para realizar a atualização. Retorna uma resposta 
+     * indicando o sucesso ou a falha da operação.
+     * 
+     * @param {Request} req - Objeto da requisição HTTP contendo os dados do emprestimo no corpo e o ID nos parâmetros.
+     * @param {Response} res - Objeto da resposta HTTP usado para enviar o status e mensagens ao aluno.
+     * @returns {Promise<Response>} - Retorna:
+     *   - Status 200 e uma mensagem de sucesso se a atualização for bem-sucedida.
+     *   - Status 400 e uma mensagem de erro caso a atualização falhe ou ocorra uma exceção.
+     */
+    static async atualizar(req: Request, res: Response): Promise<any> {
+        try {
+            // Recupera os dados do emprestimo a serem atualizados do corpo da requisição.
+            const emprestimoRecebido: EmprestimoDTO = req.body;
+
+            // Recupera o ID do emprestimo a ser atualizado a partir dos parâmetros da URL.
+            const idEmprestimoRecebido = parseInt(req.params.idEmprestimo as string);
+
+            // Verifica se o ID do emprestimo é válido.
+            if (isNaN(idEmprestimoRecebido) || idEmprestimoRecebido <= 0) {
+                return res.status(400).json({ mensagem: "ID do emprestimo inválido. Por favor, forneça um ID válido." });
+            }
+
+            // Cria um novo objeto `emprestimoVenda` com os dados recebidos.
+            const emprestimoAtualizado = new Emprestimo(
+                emprestimoRecebido.idLivro,
+                emprestimoRecebido.idAluno,
+                emprestimoRecebido.dataEmprestimo,
+                emprestimoRecebido.dataDevolucao,
+                emprestimoRecebido.statusEmprestimo
+            );
+
+            // Define o ID do emprestimo no objeto `emprestimoAtualizado`.
+            emprestimoAtualizado.setIdEmprestimo(idEmprestimoRecebido);
+
+            // Chama o método do modelo para atualizar o emprestimo e armazena a resposta (true ou false).
+            const respostaModelo = await Emprestimo.atualizarEmprestimo(emprestimoAtualizado);
+
+            // Verifica se a resposta do modelo indica que o emprestimo foi atualizado com sucesso.
+            if (respostaModelo) {
+                return res.status(200).json({ mensagem: "Emprestimo atualizado com sucesso!" });
+            } else {
+                return res.status(400).json({ mensagem: "Não foi possível atualizar o emprestimo. Entre em contato com o administrador." });
+            }
+        } catch (error) {
+            // Loga o erro no console para depuração.
+            console.error(`Erro ao atualizar o emprestimo: ${error}`);
+
+            // Retorna uma resposta HTTP com status 400 e mensagem genérica de erro.
+            return res.status(400).json({ mensagem: "Não foi possível atualizar o emprestimo. Entre em contato com o administrador." });
         }
     }
 }

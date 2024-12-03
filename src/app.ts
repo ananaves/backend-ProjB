@@ -4,7 +4,7 @@ import { DatabaseModel } from './model/DatabaseModel';
 /**
  * Porta do servidor
  */
-const port : number = 3333;
+const port : number = 4444;
 
 /**
  * Testando a conexão com o banco de dados

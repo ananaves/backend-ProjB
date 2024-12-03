@@ -226,7 +226,7 @@ export class Livro {
     }
     /**
          * O método listarLivro executa uma consulta SQL para buscar todos os livros da tabela livro no banco de dados.
-         * @returns todos os carros encontrados no banco de dados.
+         * @returns todos os livros encontrados no banco de dados.
          */
     static async listarLivro(): Promise<Array<Livro> | null> {
 
@@ -240,7 +240,7 @@ export class Livro {
 
             const respostaBD = await database.query(querySelectLivro);
 
- 
+
             respostaBD.rows.forEach((livro: any) => {
                 let novoLivro = new Livro(
                     livro.titulo,
@@ -330,5 +330,102 @@ export class Livro {
             return false;
         }
     }
+
+    /**
+       * Remove um livro do banco de dados com base no ID fornecido.
+       * 
+       * Esta função executa uma operação de exclusão na tabela livro para remover um registro cujo id_livro 
+       * corresponda ao valor fornecido. Ela retorna um valor booleano indicando o sucesso ou a falha da operação.
+       * 
+       * @param {number} idLivro - O identificador único do livro que será removido do banco de dados.
+       * @returns {Promise<boolean>} - Retorna true se o livro foi removido com sucesso, ou false caso contrário.
+       *                                Em caso de erro, a função trata a exceção e retorna false.
+       * 
+       * @throws {Error} - Exibe uma mensagem de erro no console e os detalhes do erro caso a remoção falhe.
+       */
+
+    static async removerLivro(idLivro: number): Promise<boolean> {
+        try {
+            // Cria uma query SQL para deletar o livro do banco de dados baseado no ID.
+            const queryDeleteLivro = `DELETE FROM Livro WHERE id_livro = ${idLivro}`;
+
+            // Executa a query no banco de dados e armazena a resposta.
+            const respostaBD = await database.query(queryDeleteLivro);
+
+            // Verifica se alguma linha foi afetada pela operação de exclusão.
+            if (respostaBD.rowCount != 0) {
+                // Loga uma mensagem de sucesso no console indicando que o livro foi removido.
+                console.log(`Livro removido com sucesso! ID removido: ${idLivro}`);
+                // Retorna true para indicar sucesso na remoção.
+                return true;
+            }
+
+            // Retorna false se nenhuma linha foi afetada (nenhum livro removido).
+            return false;
+
+        } catch (error) {
+            // Exibe uma mensagem de erro no console caso ocorra uma exceção.
+            console.log('Erro ao remover livro. Verifique os logs para mais detalhes.');
+            // Loga o erro no console para depuração.
+            console.log(error);
+            // Retorna false indicando que a remoção falhou.
+            return false;
+        }
+    }
+
+    /**
+     * Atualiza os dados de um livro no banco de dados.
+     * 
+     * Esta função atualiza as informações de um livro na tabela Livro com base nos valores do objeto 
+     * livro fornecido. Ela verifica se a operação foi bem-sucedida e retorna um valor booleano.
+     * 
+     * @param {livro} livro - Objeto contendo os dados atualizados do livro. O objeto deve possuir os métodos 
+     *                        getTitulo(), getAutor(), getEditora(), getAnoPublicacao(), getIsbn(), getQuantTotal(),
+     *                        getQuantDisponivel(), getValorAquisicao() e getStatusLivroEmprestado() para acessar 
+     *                        as informações do livro.
+     * @returns {Promise<boolean>} - Retorna true se os dados do livro foram atualizados com sucesso ou false 
+     *                                caso contrário. Em caso de erro, a função trata a exceção e retorna false.
+     * 
+     * @throws {Error} - Exibe uma mensagem de erro no console e os detalhes do erro caso a atualização falhe.
+     */
+    static async atualizarLivro(livro: Livro): Promise<boolean> {
+        try {
+            // Cria uma query SQL para atualizar os dados do livro no banco de dados.
+            const queryUpdateLivro = `UPDATE Livro SET
+                                titulo = '${livro.getTitulo()}',
+                                autor = '${livro.getAutor()}',
+                                editora = '${livro.getEditora()}',
+                                ano_publicacao = '${livro.getAnoPublicacao()}',
+                                isbn = '${livro.getIsbn()}',
+                                quant_total = '${livro.getQuantTotal()}',
+                                quant_disponivel = '${livro.getQuantDisponivel()}',
+                                valor_aquisicao =  '${livro.getValorAquisicao()}',
+                                status_livro_emprestimo = '${livro.getStatusLivroEmprestado()}'
+                                WHERE id_livro = '${livro.getIdLivro()}'`;
+
+
+            // Executa a query no banco de dados e armazena a resposta.
+            const respostaBD = await database.query(queryUpdateLivro);
+
+            // Verifica se alguma linha foi alterada pela operação de atualização.
+            if (respostaBD.rowCount != 0) {
+                // Loga uma mensagem de sucesso no console indicando que o livro foi atualizado.
+                console.log(`Livro atualizado com sucesso! ID: ${livro.getIdLivro()}`);
+                // Retorna true para indicar sucesso na atualização.
+                return true;
+            }
+            // Retorna false se nenhuma linha foi alterada (atualização não realizada).
+            return false;
+
+        } catch (error) {
+            // Exibe uma mensagem de erro no console caso ocorra uma exceção.
+            console.log('Erro ao atualizar o livro. Verifique os logs para mais detalhes.');
+            // Loga o erro no console para depuração.
+            console.log(error);
+            // Retorna false indicando que a atualização falhou.
+            return false;
+        }
+    }
+
 }
 
